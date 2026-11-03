@@ -1,0 +1,137 @@
+Act as a Principal Full-Stack Engineer and UI/UX Designer. Build a complete, mobile-optimized Solar Installation & Maintenance CRM Web Application from scratch using React (Vite), Firebase (Authentication & Firestore), and Plain CSS with Tailwind utility animations where needed.
+
+======================================================================
+1. CORE OBJECTIVES & PERMISSION MODEL (THE YOUTUBE ACCESS MODEL)
+======================================================================
+The application serves two distinct user roles:
+
+1. ADMIN / SUPER USER
+   - Complete CRUD access to all solar projects, user accounts, and maintenance tickets.
+   - Central control to toggle projects as "Showcase" items (publicly visible).
+   - Global dashboard displaying business metrics (total kW capacity deployed, active maintenance tickets, upcoming service schedules, total client savings).
+
+2. CUSTOMER / PROPERTY OWNER
+   - Public/Showcase View: Can browse a public gallery of completed projects (showing city, system capacity in kW, environmental impact/savings, high-level photos) without exposing sensitive customer information.
+   - Private "My Solar System" Dashboard: Upon self sign-up, entering a valid "Claim Code/Installation ID" links the user directly to their specific installation.
+   - Deep-Dive Access: Customers can view ONLY their own project details (panel specifications, inverter serial numbers, warranty expiration dates, total energy/money saved metrics based on daily sunlight formulas, and historical service logs showing technician name, date, and cost).
+   - Maintenance Ticket Raising: Ability to submit maintenance requests with problem notes and optional photo attachments.
+
+======================================================================
+2. USER ONBOARDING & ACCOUNT CLAIMING FLOW
+======================================================================
+1. Admin creates a new project document in Firestore with a auto-generated unique "Claim Code" (e.g., SOLAR-PUNE-8492).
+2. Customer signs up via Email/Password on the public sign-up page.
+3. Upon first login, if the customer has no linked project, they are directed to an "Enter Installation Claim Code" screen.
+4. Entering the valid Claim Code links the project's ownerId to their Firebase request.auth.uid and unlocks their private dashboard.
+
+======================================================================
+3. DATA ARCHITECTURE & FIRESTORE COLLECTIONS
+======================================================================
+Design the database schema using the following collections:
+
+1. `users` Collection:
+   - uid (string, Primary Key matching Firebase Auth)
+   - email (string)
+   - name (string)
+   - role (string: "admin" | "customer")
+   - createdAt (timestamp)
+
+2. `projects` Collection:
+   - id (string)
+   - claimCode (string, unique)
+   - ownerId (string, nullable until claimed)
+   - title (string, e.g., "10 kW Residential Rooftop")
+   - city (string)
+   - capacityKW (number)
+   - installationDate (timestamp)
+   - warrantyExpiryDate (timestamp)
+   - panelModel (string)
+   - inverterModel (string)
+   - inverterSerialNumber (string)
+   - tariffRatePerkWh (number, for savings calculations)
+   - dailyAvgSunlightHours (number, default e.g., 5.5)
+   - isPublicShowcase (boolean)
+   - showcaseImage (string URL)
+   - nextMaintenanceDate (timestamp)
+
+3. `maintenance_logs` Collection:
+   - id (string)
+   - projectId (string)
+   - serviceDate (timestamp)
+   - technicianName (string)
+   - workPerformed (string)
+   - cost (number)
+   - status (string: "Scheduled" | "Completed" | "Pending")
+   - ticketType (string: "Routine Check" | "Panel Cleaning" | "Inverter Repair" | "Emergency")
+   - customerNotes (string, optional)
+
+======================================================================
+4. TECH STACK & DESIGN REQUIREMENTS
+======================================================================
+- Front-End Framework: React (built with Vite)
+- Routing: React-Router-DOM (v6+)
+- Styling: Plain CSS for primary component structure + Tailwind CSS utility classes for responsive grids, flex layouts, and smooth transition animations.
+- Icons: Lucide-React
+- Charts: Recharts (for rendering calculated monthly/annual energy and money saved graphs)
+- Backend & Auth: Firebase JS SDK (v10+) using Firebase Auth and Firestore.
+- UI Experience: Mobile-First Responsive layout.
+  * Mobile View: Sticky bottom navigation bar, card-based feeds, single-column dashboard.
+  * Desktop View: Collapsible left sidebar, multi-column metrics dashboard, data tables for Admin lists.
+
+======================================================================
+5. STEP-BY-STEP DEVELOPMENT PHASES
+======================================================================
+Deliver the application across 4 distinct phases:
+
+PHASE 1: Core Setup & Auth Architecture
+- Initialize React (Vite) app structure, router setup, and `firebase.js` configuration.
+- Implement AuthContext to manage logged-in user state, roles (`admin` vs `customer`), and session persistent storage.
+- Create Login, Self Sign-Up, and Installation Claiming screens.
+
+PHASE 2: Public Showcase & Customer Dashboard
+- Build `/showcase` route displaying all projects where `isPublicShowcase == true` in a grid card layout.
+- Build `/dashboard` route for logged-in customers displaying:
+  * Key stats cards (System Capacity, Total Energy Generated estimate, Money Saved estimate, Next Service Due).
+  * Panel & Inverter technical spec cards.
+  * Service Timeline showing all `maintenance_logs` linked to their `projectId`.
+  * "Request Service" modal form pushing new maintenance tickets to Firestore.
+
+PHASE 3: Admin Command Center
+- Build `/admin` protected route (inaccessible to non-admins via Firestore rules and React Router guards).
+- Master Projects Table: Search, filter by city/status, edit project specs, toggle public showcase status, and generate new Claim Codes.
+- Maintenance Dispatcher: Schedule new maintenance visits, assign technician names, set costs, and update ticket statuses.
+
+PHASE 4: Security Rules & Logic Verification
+- Provide production-ready `firestore.rules` enforcing that customers can ONLY query project documents where `resource.data.ownerId == request.auth.uid` or `isPublicShowcase == true`.
+- Implement client-side formulas for estimated money saved: 
+  `Total Saved = Capacity(kW) * Daily Hours * Days Since Install * Tariff Rate`.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+I need these changes.
+1. in the showcase page, make it like a professional solar business website, 
+keep the coloring and hero banners similar but add content placeholders. add images
+and dont show the featured installations just as a box with details. show it like 
+how zomato shows dishes, the image of the project, where we upload some images and select one 
+main image like a thumbnail which will be used as the image to show about project. anyone can click on that image
+and then it would take them to the about of the project, like area capacity, and all that, and then show the rest of the 
+images of the project, then on that same page there will be other featured projects but only one thumbnail image of them 
+and they can click on it, it will take them to that particular project show details, and same. on top will be the header on 
+every single page so they can return to home in one click.
+
+2.currentyl all can see the admin panel and they can easily access it without any id password as well. just remove it from that place.
+keep it id password only and as it detects that this id and password belongs to an admin then we log in as admin and see whole web app along
+with that admin panel button. it should not be visible to any normal user.
+
+3.I feel the admin still has very few control to them. there is literally no option of deleting a user. add the delete option such that on deletion
+of a user/project it goes to a trash section which can be recovered as it was as if nothing happened. give drop down options in trash, empty trash after x days.
+and ofcourse a manual way where we select specific users or projects and delete them individually, and also a direct option saying empty trash.
+
+4.admin should have options like block service/maintainence request from this user for, 1 day, 1 week, 1 month , as long as i keep it off.
+admin can reset anyones service request limits. and maybe you can add some powers to admin from your side as well.
+
+5.the claim system part looks very insecure, what if someone automates multiple combinations of letteres and numbers and claim systems. 
+it should ask more than just a code. my advice would be we show them that after they have logged in, and then they see the claim system but, they will
+only be able to claim system with their email/ phone number or whatever. so even if they enter some other claim code which exists in our data base they will then be redirected
+to login page.once a solar installation is claimed by a user it should be shifted into a small button at the bottom of the page, saying add new solar installation or some like that.
+
+

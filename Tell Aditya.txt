@@ -1,0 +1,45 @@
+Landing page:
+professional business website. after scrolling a section should come which should feature our projects. this happens dynamically. on creating a 
+new solar project on database we get option to feature this project and the this project is featured on the feature section.
+we can always change the featured projects. Users can click on the featured projects and they can see images uploaded by us.
+regular users should not be able to see full details of the project, they should only see area name, and capacity of the solar project.
+
+*NEW*
+Our products page:
+dynamic page where admin is able to add/edit/remove products. 
+dynamically sort the procucts into categories. 
+admin can create edit remove these categories. 
+for example: Switch category : EPON GPON models.
+Category : Router: Single band, Dual band router.
+this is how the interface should look for the admin when adding these products.
+the admin logs in as admin : then he selects the category from drop down list with search option: now in this list admin can add
+and edit and remove list names.so they have freedom to create new categories. on selecting this cateogory the will then be presented
+with another drop down list with search option, and this list is completely dynamic it is based on the category that the user has selected.
+
+then price range (optional).
+**
+
+no regular user should ever be able to see the admin page, not even the admin section/button should be visible to regular users.
+now create an admin page and login in is using email, id, pass. Admin has full control of the web application, and full control of users.
+admin can create new users, new project, delete users, edit users, see their projects, project capacity, power generated, everything.
+should be able to send messages to users, custom messages. via whatsapp/sms.
+Admin can block a user for custom duration from sending any messages, or from sending complaints.
+
+users. 
+a person who is assigned with a project will be able to see everything related to their own project, but they wont be able to see the
+details of other's project. they can see their own project, generated capacity, date of installation, next service date, service reminders
+through email/whatsapp/sms. any custom message from admin via whatsapp/sms.users can send complaints, custom message through this complaint
+portal. but a user can only send 5 complaints per day. to avoid spam. they should not be able to see how many complaint they have left.
+only upon exhausting the daily limit they will be shown a message that daily limit has been reached, and then tell when they can complaint
+again showing date and time. and also start a timer to the same.
+
+*NEW*
+the existing web is ready, make it polished, make it look professional but, color theme is Gold/Amber, Navy blue, lt blue, white and
+if and only if necessary you can use lt green.
+adding the our products section.
+
+Giving admin more control.
+
+whatever is the existing web application make it more efficient, smoother and better.
+
+**
